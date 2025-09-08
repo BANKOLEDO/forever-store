@@ -1,0 +1,57 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Prata&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* =======================
+   General Font Styles
+   ======================= */
+* {
+  font-family: 'Outfit', sans-serif;
+}
+
+.prata-regular {
+  font-family: 'Prata', serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* =======================
+   Active Nav Styling
+   ======================= */
+a.active hr {
+  display: block;
+}
+
+@media (max-width: 640px) {
+  a.active {
+    background-color: black;
+    color: white;
+  }
+}
+
+/* =======================
+   Scrollbar Styles
+   ======================= */
+
+/* Default desktop scrollbar (visible & styled) */
+::-webkit-scrollbar {
+  width: 8px; /* thin scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1; /* light gray track */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;      /* dark gray thumb */
+  border-radius: 10px;   /* rounded edges */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;      /* darker on hover */
+}
+
+/* Hide scrollbar only on mobile */
+
