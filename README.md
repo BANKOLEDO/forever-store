@@ -44,7 +44,7 @@ This project is not just a store — it’s a **showcase of real-world eCommerce
 
 - **Frontend:** React, Tailwind CSS  
 - **State Management:** React Context API + Hooks  
-- **Deployment:** Netlify  
+- **Deployment:** Vercel  
 
 ---
 
