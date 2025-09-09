@@ -10,6 +10,7 @@ import Cart from './Pages/Cart';
 import Login from './Pages/Login';
 import PlaceOrder from './Pages/PlaceOrder';
 import Orders from './Pages/Orders';
+import NotFound from './Pages/NotFound';
 import Navbar from './Components/Navbar';
 import Footer from './Components/Footer';
 import ScrollToTopButton from './Components/ScrollToTopButton';
@@ -38,6 +39,9 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/place-order" element={<PlaceOrder />} />
         <Route path="/orders" element={<Orders />} />
+
+        {/* 👇 Catch-all route */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
 
       <Footer />
