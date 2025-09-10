@@ -1,7 +1,7 @@
-import logo from './logo.png'
-import add_icon from './add_icon.png'
-import order_icon from './order_icon.png'
-import upload_area from './upload_area.png'
+import logo from './logo.webp'
+import add_icon from './add_icon.webp'
+import order_icon from './order_icon.webp'
+import upload_area from './upload_area.webp'
 import parcel_icon from './parcel_icon.svg'
 
 export const assets = {

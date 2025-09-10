@@ -16,7 +16,7 @@ const CustomSelect = ({ value, onChange }) => {
   };
 
   return (
-    <div className="relative inline-block w-31 md:w-40">
+    <div className="relative inline-block w-31  ">
       {/* Select Box */}
       <div
         onClick={() => setOpen(!open)}

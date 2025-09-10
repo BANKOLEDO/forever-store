@@ -1,60 +1,100 @@
-import { useContext, useEffect, useState } from 'react';
-import { ShopContext } from '../Context/ShopContext';
-import { assets } from '../assets/assets';
-import { useLocation } from 'react-router-dom';
+import { useContext, useEffect, useState } from "react";
+import { ShopContext } from "../Context/ShopContext";
+import { assets } from "../assets/assets";
+import { useLocation } from "react-router-dom";
 
 const SearchBar = () => {
-  // Extract context values related to search and visibility from ShopContext
   const { search, setSearch, showSearch, setShowSearch } =
     useContext(ShopContext);
 
-  // Local state to control visibility and animation of the search bar
-  const [visible, setVisible] = useState(showSearch);
-  const [animate, setAnimate] = useState('');
+  const [visible, setVisible] = useState(false);
+  const [searchHistory, setSearchHistory] = useState([]);
 
-  // Get current URL path
   const location = useLocation();
 
-  // Effect to update the search bar visibility and animation based on URL path and showSearch
-
+  // Load history from localStorage on mount
   useEffect(() => {
-    if (location.pathname.includes('collection')) {
-      // Show the search bar and apply the scale-up animation if it includes 'collection' page
-
-      setVisible(true);
-      setAnimate('animate-scale-up-center');
-    } else {
-      // Hide the search bar if doesn`t includes 'collection' page
-      setVisible(false);
+    const stored = localStorage.getItem("searchHistory");
+    if (stored) {
+      setSearchHistory(JSON.parse(stored));
     }
-  }, [location, showSearch]); // Update visibility when location and showSearch change
+  }, []);
+
+  // Save history to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
+  }, [searchHistory]);
+
+  // Control visibility
+  useEffect(() => {
+    setVisible(location.pathname.includes("collection"));
+  }, [location, showSearch]);
 
   const handleClose = () => {
-    setAnimate('animate-scale-down-center');
-    setTimeout(() => setShowSearch(false), 400); // Hide the search bar after a delay to match the duration of the scale-down animation
+    if (search.trim()) {
+      setSearchHistory((prev) => [
+        search,
+        ...prev.filter((item) => item !== search), // avoid duplicates
+      ]);
+    }
+    setSearch("");
+    setShowSearch(false);
   };
 
-  // Conditionally render the search bar based on visibility and showSearch state
+  const handleClearAll = () => {
+    setSearchHistory([]);
+    localStorage.removeItem("searchHistory");
+  };
+
   return visible && showSearch ? (
-    <div className={`border-t border-b bg-gray-50 text-center ${animate} `}>
-      <div className="w-[450px] inline-flex items-center justify-center border border-gray-400 px-5 py-2 my-8 rounded-full ">
+    <div className="border-t border-b bg-gray-50 text-center py-4">
+      {/* Input */}
+      <div className="inline-flex items-center justify-between border border-gray-300 rounded-md w-3/4 sm:w-1/2 px-4 py-2 bg-white shadow-sm">
         <input
           type="text"
-          placeholder="Search..."
+          placeholder="Search products..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className=" flex-1 outline-none bg-inherit text-sm "
-        ></input>
-        <img src={assets.search_icon} alt="" className="w-4" />
+          className="flex-1 outline-none text-sm bg-transparent"
+        />
+        <img src={assets.search_icon} alt="search" className="w-4 ml-2" />
       </div>
       <img
         src={assets.cross_icon}
-        alt=""
-        className="w-4 h-4 ml-3 inline  cursor-pointer"
+        alt="close"
+        className="w-3 ml-2 inline cursor-pointer"
         onClick={handleClose}
       />
+
+      {/* History */}
+      {searchHistory.length > 0 && (
+        <div className="mt-4 px-6">
+          <div className="flex justify-between items-center mb-2">
+            <p className="text-sm font-medium text-gray-600">
+              Recent Searches
+            </p>
+            <button
+              onClick={handleClearAll}
+              className="text-xs text-red-500 hover:underline"
+            >
+              Clear all
+            </button>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {searchHistory.map((item, idx) => (
+              <span
+                key={idx}
+                onClick={() => setSearch(item)}
+                className="px-3 py-1 text-xs rounded-full bg-gray-100 text-gray-700 cursor-pointer hover:bg-gray-200 transition"
+              >
+                {item}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
-  ) : null; // Render nothing if visible or showSearch is false
+  ) : null;
 };
 
 export default SearchBar;

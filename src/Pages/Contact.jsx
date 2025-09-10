@@ -21,7 +21,7 @@ const Contact = () => {
         <motion.img
           src={assets.contact_img}
           alt="contact-img"
-          className="w-full sm:max-w-[480px]"
+          className="w-full md:max-w-[450px] "
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
@@ -29,7 +29,7 @@ const Contact = () => {
         />
 
         <div className="flex flex-col justify-center items-start gap-4">
-          <p className="font-semibold text-altext-gray-600">Our Store</p>
+          <p className="font-semibold text-gray-600">Our Store</p>
           <p className="text-gray-500">
             7298 King Lodge
             <br />
