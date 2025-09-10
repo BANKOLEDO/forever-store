@@ -27,6 +27,8 @@ const Hero = () => {
       <motion.img
         src={assets.hero_img}
         alt="hero-img"
+        width={1259}    // actual image width
+        height={1008}  
         className="w-full sm:w-1/2"
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
