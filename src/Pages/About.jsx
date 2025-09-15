@@ -55,7 +55,7 @@ const About = () => {
           <b>Quality Assurance</b>
           <p className="text-gray-600">
             We take pride in offering only the highest quality products that
-            meet our stringent standards for durability, performance, and value.{' '}
+            meet our stringent standards for durability, performance, and great value.{' '}
           </p>
         </div>
         <div className="border px-10 md:px-16 py-8 sm:py-20 flex flex-col gap-5">
