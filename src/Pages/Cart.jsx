@@ -3,6 +3,8 @@ import { ShopContext } from '../Context/ShopContext';
 import Title from '../Components/Title';
 import { assets } from '../assets/assets';
 import CartTotal from '../Components/CartTotal';
+import RelatedProducts from '../Components/RelatedProducts';
+import { Truck } from 'lucide-react';
 
 const Cart = () => {
   const { products, currency, cartItems, updateQuantity, navigate, addOrder } =
@@ -25,91 +27,116 @@ const Cart = () => {
     setCartData(tempData);
   }, [cartItems]);
 
+  // ✅ Reference product for related section (first cart item)
+  const refProduct =
+    cartData.length > 0
+      ? products.find((p) => p._id === cartData[0]._id)
+      : null;
+
   return (
-    <div className="pt-14 border-t">
-      <div className="mb-3 text-2xl">
+    <div className="pt-10 border-t">
+      <div className="flex items-center justify-center mb-3 gap-2">
+        <Truck size={16} className="text-blue-600" />
+        <p>Free delivery on orders above $49</p>
+        </div>
+      <div className="mb-6 text-2xl">
         <Title text1={'YOUR'} text2={'CART'} />
       </div>
-
-      {/* Cart Items      */}
-
+      {/* Cart Items */}
       <div>
-        {cartData.map((item, index) => {
-          const productsData = products.find(
-            (product) => product._id === item._id
-          );
+        {cartData.length > 0 ? (
+          cartData.map((item, index) => {
+            const productsData = products.find(
+              (product) => product._id === item._id
+            );
 
-          return (
-            <div
-              key={index}
-              className="py-3 border-b border-t text-gray-700 grid  grid-cols-[4fr_0.5fr_0.5fr] sm:grid-cols-[4fr_2fr_0.5fr] items-center gap-4"
-            >
-              <div className="flex items-start gap-6">
-                <img
-                  src={productsData.image[0]}
-                  alt=""
-                  className="w-16 sm:w-20"
-                />
-                <div>
-                  <p className="text-sm sm:text-lg font-medium">
-                    {productsData.name}
-                  </p>
+            return (
+              <div
+                key={index}
+                className="py-3 border-b border-t text-gray-700 grid grid-cols-[4fr_0.5fr_0.5fr] sm:grid-cols-[4fr_2fr_0.5fr] items-center gap-4"
+              >
+                <div className="flex items-start gap-6">
+                  <img
+                    src={productsData.image[0]}
+                    alt=""
+                    className="w-16 sm:w-20"
+                  />
+                  <div>
+                    <p className="text-sm sm:text-lg font-medium">
+                      {productsData.name}
+                    </p>
 
-                  <div className="flex items-center gap-5 mt-2">
-                    <p className=" ">
-                      {currency}
-                      {productsData.price}
-                    </p>
-                    <p className="px-2 sm:px-3 sm:py-1 border bg-slate-50 ">
-                      {item.size}
-                    </p>
+                    <div className="flex items-center gap-5 mt-2">
+                      <p>
+                        {currency}
+                        {productsData.price}
+                      </p>
+                      <p className="px-2 sm:px-3 sm:py-1 border bg-slate-50">
+                        {item.size}
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <input
-                onChange={(e) => {
-                  e.target.value === '' || e.target.value < 0
-                    ? null
-                    : updateQuantity(
-                        item._id,
-                        item.size,
-                        Number(e.target.value)
-                      );
-                }}
-                className="border  max-w-10 sm:max-w-20 px-1 sm:px-2 py-1 "
-                type="number"
-                min={1}
-                defaultValue={item.quantity}
-              />
-              <img
-                onClick={() => updateQuantity(item._id, item.size, 0)}
-                src={assets.bin_icon}
-                alt=""
-                className="w-4 mr-4 sm:w-5 cursor-pointer"
-              />
-            </div>
-          );
-        })}
+                <input
+                  onChange={(e) => {
+                    e.target.value === '' || e.target.value < 0
+                      ? null
+                      : updateQuantity(
+                          item._id,
+                          item.size,
+                          Number(e.target.value)
+                        );
+                  }}
+                  className="border max-w-10 sm:max-w-20 px-1 sm:px-2 py-1"
+                  type="number"
+                  min={1}
+                  defaultValue={item.quantity}
+                />
+                <img
+                  onClick={() => updateQuantity(item._id, item.size, 0)}
+                  src={assets.bin_icon}
+                  alt=""
+                  className="w-4 mr-4 sm:w-5 cursor-pointer"
+                />
+              </div>
+            );
+          })
+        ) : (
+          <p className="text-center text-gray-500 text-lg my-10">
+            Your Cart is Empty
+          </p>
+        )}
       </div>
 
-      <div className="flex justify-end my-20">
-        <div className="w-full sm:w-[450px]">
-          <CartTotal />
+      {/* Cart Total + Checkout */}
+      {cartData.length > 0 && (
+        <div className="flex justify-end my-20">
+          <div className="w-full sm:w-[450px]">
+            <CartTotal />
 
-          <div className="w-full text-end">
-            <button
-              onClick={() => {
-                addOrder(); // Call addOrder to move items to orders state
-                navigate('/place-order');
-              }}
-              className="my-8 px-8 py-3 bg-black text-white text-sm"
-            >
-              PROCEED TO CHECKOUT
-            </button>
+            <div className="w-full text-end">
+              <button
+                onClick={() => {
+                  addOrder(); // Call addOrder to move items to orders state
+                  navigate('/place-order');
+                }}
+                className="my-8 px-8 py-3 bg-black text-white text-sm"
+              >
+                PROCEED TO CHECKOUT
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      )}
+
+      {/* Related Products */}
+      {refProduct && (
+        <RelatedProducts
+          category={refProduct.category}
+          subCategory={refProduct.subCategory}
+        />
+      )}
     </div>
   );
 };

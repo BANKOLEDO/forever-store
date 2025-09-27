@@ -5,7 +5,7 @@ import { ShopContext } from '../Context/ShopContext';
 
 const Navbar = () => {
   const [visible, setVisible] = useState(false);
-  const { setShowSearch, getCartCount } = useContext(ShopContext);
+  const { setShowSearch, getCartCount, user } = useContext(ShopContext);
 
   return (
     <>
@@ -25,39 +25,38 @@ const Navbar = () => {
               { name: "ABOUT", path: "/about" },
               { name: "CONTACT", path: "/contact" },
             ].map((link) => (
-            <NavLink
-              key={link.name}
-              to={link.path}
-              className="flex flex-col items-center gap-1 group relative"
-            >
-              <p className="transition-colors duration-300 group-hover:text-black">{link.name}</p>
-              <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-black transition-all duration-300 group-hover:w-full"></span>
-            </NavLink>
-          ))}
-        </ul>
-
+              <NavLink
+                key={link.name}
+                to={link.path}
+                className="flex flex-col items-center gap-1 group relative"
+              >
+                <p className="transition-colors duration-300 group-hover:text-black">{link.name}</p>
+                <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-black transition-all duration-300 group-hover:w-full"></span>
+              </NavLink>
+            ))}
+          </ul>
 
           {/* Icons (search, profile, cart, menu) */}
           <div className="flex items-center gap-6">
             {/* Search */}
             <Link to="/collection">
-            <img
-              onClick={() => setShowSearch(true)}
-              src={assets.search_icon}
-              alt="search"
-              className="w-5 cursor-pointer"
-            />
+              <img
+                onClick={() => setShowSearch(true)}
+                src={assets.search_icon}
+                alt="search"
+                className="w-5 cursor-pointer"
+              />
             </Link>
 
             {/* Profile */}
             <div className="group relative">
-              <Link to="/login">
-                <img
-                  src={assets.profile_icon}
-                  alt="profile"
-                  className="w-5 cursor-pointer"
-                />
-              </Link>
+              {user ? (
+                <p className="cursor-pointer">{user.name}</p>
+              ) : (
+                <Link to="/login">
+                  <img src={assets.profile_icon} alt="profile" className="w-5 cursor-pointer" />
+                </Link>
+              )}
             </div>
 
             {/* Cart */}
@@ -80,7 +79,7 @@ const Navbar = () => {
       </div>
 
       {/* Spacer to push content below navbar */}
-      <div className="h-[80px]" /> 
+      <div className="h-[80px]" />
 
       {/* Fullscreen mobile menu */}
       {visible && (
@@ -93,18 +92,10 @@ const Navbar = () => {
             <p className="font-semibold">Back</p>
           </div>
 
-          <NavLink onClick={() => setVisible(false)} className="py-2 pl-6 border" to="/">
-            HOME
-          </NavLink>
-          <NavLink onClick={() => setVisible(false)} className="py-2 pl-6 border" to="/collection">
-            COLLECTION
-          </NavLink>
-          <NavLink onClick={() => setVisible(false)} className="py-2 pl-6 border" to="/about">
-            ABOUT
-          </NavLink>
-          <NavLink onClick={() => setVisible(false)} className="py-2 pl-6 border" to="/contact">
-            CONTACT
-          </NavLink>
+          <NavLink onClick={() => setVisible(false)} className="py-2 pl-6 border" to="/">HOME</NavLink>
+          <NavLink onClick={() => setVisible(false)} className="py-2 pl-6 border" to="/collection">COLLECTION</NavLink>
+          <NavLink onClick={() => setVisible(false)} className="py-2 pl-6 border" to="/about">ABOUT</NavLink>
+          <NavLink onClick={() => setVisible(false)} className="py-2 pl-6 border" to="/contact">CONTACT</NavLink>
         </div>
       )}
     </>

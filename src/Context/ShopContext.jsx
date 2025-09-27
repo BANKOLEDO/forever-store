@@ -9,7 +9,7 @@ export const ShopContext = createContext();
 const ShopContextProvider = ({ children }) => {
   const currency = '$';
   const delivery_fee = 10;
-
+  const [user, setUser] = useState(null); // Add this at the top with other useStates
   const [search, setSearch] = useState('');
   const [showSearch, setShowSearch] = useState(false);
   const [cartItems, setCartItems] = useState({});
@@ -18,7 +18,7 @@ const ShopContextProvider = ({ children }) => {
 
   const addToCart = async (itemId, size) => {
     if (!size) {
-      toast.error('Please select a size');
+      toast.error('Please Select Product Size');
       return;
     }
 
@@ -106,6 +106,9 @@ const ShopContextProvider = ({ children }) => {
     addOrder, // Add this to allow placing orders
     orders,
     navigate,
+    // ✅ User management
+    user,
+    setUser,
   };
 
   return <ShopContext.Provider value={value}>{children}</ShopContext.Provider>;
